@@ -49,3 +49,11 @@ def login():
 def profile():
     user = User.get_or_none(User.id == g.user['id'])
     return respond_data(user.to_dict())
+
+
+def verifications():
+    user = User.get_or_none(User.id == g.user['id'])
+    vs = user.verifications
+    vs = [v.to_dict() for v in vs]
+
+    return respond_data(vs)
