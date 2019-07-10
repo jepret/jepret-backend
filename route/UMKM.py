@@ -12,6 +12,11 @@ create_UMKM = create_UMKM.add_next(
             "required": True,
             "empty": False
         },
+        "photo": {
+            "type": "string",
+            "required": True,
+            "empty": False
+        },
         "lat": {
             "type": "float",
             "required": True

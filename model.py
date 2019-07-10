@@ -53,6 +53,7 @@ class User(BaseModel):
 class UMKM(BaseModel):
     owner = pw.ForeignKeyField(User, backref="umkms")
     name = pw.CharField()
+    photo = pw.CharField()
     lat = pw.FloatField(default=0.0)
     lng = pw.FloatField(default=0.0)
     sector = pw.CharField()
