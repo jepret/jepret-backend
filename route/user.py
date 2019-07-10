@@ -24,8 +24,11 @@ login = BaseValidator(
 login = login.add_next(handler.login)
 
 profile = AuthMiddleware().add_next(handler.profile)
+verifications = AuthMiddleware().add_next(handler.verifications)
+
 
 router = Router("/user")
 router.route("/login", login, methods=["POST"])
 router.route("/register", register, methods=["POST"])
 router.route("/profile", profile)
+router.route("/verification", verifications)

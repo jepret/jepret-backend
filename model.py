@@ -68,6 +68,14 @@ class Verification(BaseModel):
     photo = pw.CharField()
     star = pw.IntegerField(default=0)
     review = pw.CharField(default="")
+    pending = pw.BooleanField(default=True)
+    success = pw.BooleanField(default=False)
+
+
+class QuestionAnswer(BaseModel):
+    verification = pw.ForeignKeyField(Verification, backref="qas")
+    question = pw.CharField()
+    answer = pw.CharField()
 
 
 class File(BaseModel):
