@@ -14,7 +14,7 @@ def create_UMKM():
     umkm = UMKM(**data)
     umkm.save()
 
-    return respond_data(umkm.to_dict())
+    return respond_data(umkm.to_dict(exclude_balance=False))
 
 
 def delete_UMKM():
@@ -24,7 +24,7 @@ def delete_UMKM():
         raise BaseError("UMKM not found", 404)
 
     umkm.delete_instance()
-    return respond_data(umkm.to_dict())
+    return respond_data(umkm.to_dict(exclude_balance=False))
 
 
 def get_UMKM(umkm_id):
@@ -32,7 +32,7 @@ def get_UMKM(umkm_id):
     if not umkm:
         raise BaseError("UMKM not found", 404)
 
-    return respond_data(umkm.to_dict())
+    return respond_data(umkm.to_dict(exclude_balance=umkm.owner.id != g.user['id']))
 
 
 def nearby_UMKM():

@@ -1,8 +1,9 @@
 from flask import request, g
 
 from core.error import BaseError
+from service.nlp import analyze_sentiment
 from core.util import *
-from model import Verification, QuestionAnswer, UMKM
+from model import Verification, QuestionAnswer, UMKM, UMKMStatistic
 
 
 def create_verification():
@@ -24,6 +25,21 @@ def create_verification():
 
     verification = Verification(**verification_data)
     verification.save()
+
+    stat = UMKMStatistic.get_or_none(UMKMStatistic.umkm == umkm)
+    if not stat:
+        stat = UMKMStatistic(umkm=umkm)
+        stat.save()
+
+    result = analyze_sentiment(verification.review)
+    if result == 0:
+        stat.neutral_review_count += 1
+    elif result == 1:
+        stat.positive_review_count += 1
+    else:
+        stat.negative_review_count += 1
+
+    stat.save()
 
     items = []
     for qa in data['qas']:

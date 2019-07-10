@@ -35,6 +35,7 @@ class User(BaseModel):
     id_card = pw.CharField(unique=True)
     phone_number = pw.CharField(unique=True)
     password = pw.CharField()
+    balance = pw.IntegerField(default=0)
 
     @staticmethod
     def hash(password):
@@ -61,6 +62,20 @@ class UMKM(BaseModel):
     city = pw.CharField()
     province = pw.CharField()
     founding_date = pw.DateField()
+    balance = pw.IntegerField(default=0)
+
+    def to_dict(self, exclude=[], exclude_balance=True):
+        if exclude_balance:
+            exclude.append(UMKM.balance)
+
+        return super().to_dict(exclude)
+
+
+class UMKMStatistic(BaseModel):
+    umkm = pw.ForeignKeyField(UMKM, backref="statistic")
+    negative_review_count = pw.IntegerField(default=0)
+    positive_review_count = pw.IntegerField(default=0)
+    neutral_review_count = pw.IntegerField(default=0)
 
 
 class Verification(BaseModel):
