@@ -20,6 +20,11 @@ create_UMKM = create_UMKM.add_next(
             "type": "float",
             "required": True
         },
+        "sector": {
+            "type": "string",
+            "required": True,
+            "empty": False
+        },
         "address": {
             "type": "string",
             "required": True,

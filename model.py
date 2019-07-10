@@ -55,6 +55,7 @@ class UMKM(BaseModel):
     name = pw.CharField()
     lat = pw.FloatField(default=0.0)
     lng = pw.FloatField(default=0.0)
+    sector = pw.CharField()
     address = pw.CharField()
     city = pw.CharField()
     province = pw.CharField()
@@ -65,3 +66,5 @@ class Verification(BaseModel):
     verifier = pw.ForeignKeyField(User, backref="verifications")
     umkm = pw.ForeignKeyField(UMKM, backref="verifications")
     photo = pw.CharField()
+    star = pw.IntegerField(default=0)
+    review = pw.CharField(default="")
