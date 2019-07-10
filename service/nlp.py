@@ -1,7 +1,9 @@
+import os
 import requests
 
 def sentiment_analyze(text):
-    PROSA_API_KEY = 'i1kN9ZP1ngILFlScL7dSz7O9oQlledxrcaLpAg5F'
+    PROSA_API_KEY = os.getenv("PROSA_API_KEY")
+    print(PROSA_API_KEY)
     url = 'https://api.prosa.ai/v1/sentiments'
     headers = {'x-api-key':PROSA_API_KEY}
     data = {'text':text}
