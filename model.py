@@ -3,7 +3,7 @@ import hashlib
 import peewee as pw
 from datetime import datetime
 from playhouse.shortcuts import model_to_dict
-
+from core.util import generate_random_str
 
 db = pw.MySQLDatabase(
     os.getenv("DB_NAME"),
@@ -68,3 +68,9 @@ class Verification(BaseModel):
     photo = pw.CharField()
     star = pw.IntegerField(default=0)
     review = pw.CharField(default="")
+
+
+class File(BaseModel):
+    owner = pw.ForeignKeyField(User, backref="files")
+    filename = pw.CharField()
+    unique_id = pw.CharField(default=generate_random_str)

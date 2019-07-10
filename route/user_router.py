@@ -1,7 +1,7 @@
 from core.router import Router
 from core.validator import BaseValidator
 
-import handler.user_handler as handler
+import handler.user as handler
 from middleware.auth import AuthMiddleware
 
 

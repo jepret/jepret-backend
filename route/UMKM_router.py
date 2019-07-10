@@ -1,7 +1,7 @@
 from core.router import Router
 from core.validator import BaseValidator
 
-import handler.UMKM_handler as handler
+import handler.UMKM as handler
 from middleware.auth import AuthMiddleware
 
 create_UMKM = AuthMiddleware()

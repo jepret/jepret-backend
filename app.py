@@ -7,7 +7,7 @@ from route import routers
 from model import db
 
 
-app = initialize(routers)
+app = initialize(__name__, routers)
 
 
 @app.before_request

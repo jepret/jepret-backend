@@ -15,5 +15,4 @@ class AuthMiddleware(Middleware):
 
         session = Session(token)
         g.user = session.load()
-
-        return True
+        return g.user is not None
