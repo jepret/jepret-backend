@@ -2,6 +2,7 @@ from core.router import Router
 from core.validator import BaseValidator
 
 import handler.user_handler as handler
+from middleware.auth import AuthMiddleware
 
 
 register = BaseValidator(
@@ -22,6 +23,9 @@ login = BaseValidator(
 )
 login = login.add_next(handler.login)
 
+profile = AuthMiddleware().add_next(handler.profile)
+
 router = Router("/user")
 router.route("/login", login, methods=["POST"])
 router.route("/register", register, methods=["POST"])
+router.route("/profile", profile)

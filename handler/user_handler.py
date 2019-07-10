@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, g
 
 from core.error import BaseError
 from redis_model import Session
@@ -44,3 +44,8 @@ def login():
     result["auth_token"] = token
 
     return respond_data(result)
+
+
+def profile():
+    user = User.get_or_none(User.id == g.user['id'])
+    return respond_data(user.to_dict())
