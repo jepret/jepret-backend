@@ -5,7 +5,7 @@ from flask import request, g, Response
 
 from core.error import BaseError
 from core.util import *
-from model import UMKM, Campaign
+from model import User, UMKM, Campaign, Verification
 
 
 def create_UMKM():
@@ -78,3 +78,14 @@ def get_qr(umkm_id):
     img_data = img_data.getvalue()
 
     return Response(img_data, mimetype="image/png")
+
+
+def get_verifications():
+    umkm = UMKM.get_or_none(UMKM.owner == g.user['id'])
+    if not umkm:
+        raise BaseError("You don't have any business", 404)
+
+    verifications = Verification.select().where(Verification.umkm == umkm)
+    verifications = [v.to_dict() for v in verifications]
+
+    return respond_data(verifications)

@@ -83,6 +83,7 @@ nearby_UMKM = nearby_UMKM.add_next(
 )
 nearby_UMKM = nearby_UMKM.add_next(handler.nearby_UMKM)
 get_qr = AuthMiddleware().add_next(handler.get_qr)
+get_verifications = AuthMiddleware().add_next(handler.get_verifications)
 
 router = Router("/umkm")
 router.route("/<umkm_id>", get_UMKM)
@@ -90,3 +91,4 @@ router.route("/", create_UMKM, methods=["POST"])
 router.route("/nearby", nearby_UMKM)
 router.route("/<umkm_id>/qr", get_qr)
 router.route("/delete", delete_UMKM, methods=["POST"])
+router.route("/verification", get_verifications)

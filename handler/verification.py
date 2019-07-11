@@ -24,7 +24,6 @@ def create_verification():
     del verification_data['qas']
 
     verification = Verification(**verification_data)
-    verification.save()
 
     stat = UMKMStatistic.get_or_none(UMKMStatistic.umkm == umkm)
     if not stat:
@@ -34,11 +33,15 @@ def create_verification():
     result = analyze_sentiment(verification.review)
     if result == 0:
         stat.neutral_review_count += 1
+        verification.sentiment = "neutral"
     elif result == 1:
         stat.positive_review_count += 1
+        verification.sentiment = "positive"
     else:
+        verification.sentiment = "negative"
         stat.negative_review_count += 1
 
+    verification.save()
     stat.save()
 
     items = []

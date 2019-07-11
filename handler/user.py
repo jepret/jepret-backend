@@ -42,13 +42,16 @@ def login():
 
     result = user.to_dict()
     result["auth_token"] = token
+    result["has_umkm"] = list(user.umkms) != []
 
     return respond_data(result)
 
 
 def profile():
     user = User.get_or_none(User.id == g.user['id'])
-    return respond_data(user.to_dict())
+    result = user.to_dict()
+    result["has_umkm"] = list(user.umkms) != []
+    return respond_data(result)
 
 
 def verifications():

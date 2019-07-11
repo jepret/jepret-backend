@@ -23,7 +23,10 @@ class BaseModel(pw.Model):
         super(BaseModel, self).save(force_insert, only)
 
     def to_dict(self, exclude=[]):
-        return model_to_dict(self, recurse=False, backrefs=False, exclude=exclude)
+        result = model_to_dict(self, recurse=False, backrefs=False, exclude=exclude)
+        result['created_at'] = self.created_at.strftime("%Y-%m-%d %H:%M:%S")
+        result['updated_at'] = self.updated_at.strftime("%Y-%m-%d %H:%M:%S")
+        return result
 
     class Meta:
         database = db
@@ -72,6 +75,25 @@ class UMKM(BaseModel):
         return super().to_dict(exclude)
 
 
+class UMKMDetail(BaseModel):
+    umkm = pw.ForeignKeyField(UMKM, backref="detail")
+    owner_name = pw.CharField()
+    position = pw.CharField()
+    gender = pw.CharField()
+    birth_date = pw.CharField()
+    expert_count = pw.IntegerField()
+    worker_count = pw.IntegerField()
+    gross_revenue = pw.IntegerField()
+    average_price = pw.IntegerField()
+    operational_cost = pw.IntegerField()
+    need_funding = pw.BooleanField()
+    funding_amount = pw.IntegerField()
+    funding_month_count = pw.IntegerField()
+    money_eq_success = pw.IntegerField()
+    money_eq_competence = pw.IntegerField()
+    do_care_money = pw.IntegerField()
+
+
 class Campaign(BaseModel):
     umkm = pw.ForeignKeyField(UMKM, backref="campaign")
     active = pw.BooleanField(default=False)
@@ -99,6 +121,7 @@ class Verification(BaseModel):
     review = pw.CharField(default="")
     pending = pw.BooleanField(default=True)
     success = pw.BooleanField(default=False)
+    sentiment = pw.CharField()
 
 
 class QuestionAnswer(BaseModel):
