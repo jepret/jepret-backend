@@ -5,9 +5,10 @@ dotenv.load_dotenv()
 from core.initializer import initialize
 from route import routers
 from model import db
+from admin import ADMIN_VIEWS
 
 
-app = initialize(__name__, routers)
+app = initialize(__name__, routers, ADMIN_VIEWS)
 
 
 @app.before_request

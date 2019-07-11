@@ -3,7 +3,7 @@ from flask import request, g
 
 from core.error import BaseError
 from core.util import *
-from model import UMKM
+from model import UMKM, Campaign
 
 
 def create_UMKM():
@@ -14,6 +14,9 @@ def create_UMKM():
     umkm = UMKM(**data)
     umkm.save()
 
+    campaign = Campaign(umkm=umkm)
+    campaign.save()
+
     return respond_data(umkm.to_dict(exclude_balance=False))
 
 
@@ -22,6 +25,10 @@ def delete_UMKM():
     umkm = UMKM.get_or_none((UMKM.id == data['id']) & (UMKM.owner == g.user['id']))
     if not umkm:
         raise BaseError("UMKM not found", 404)
+
+    campaign = Campaign.get_or_none(Campaign.umkm == umkm)
+    if campaign:
+        campaign.delete_instance()
 
     umkm.delete_instance()
     return respond_data(umkm.to_dict(exclude_balance=False))
@@ -40,7 +47,18 @@ def nearby_UMKM():
     lat = float(data['lat'])
     lng = float(data['lng'])
     umkms = UMKM.select()
+    umkms = [u for u in umkms if u.campaign[0].active]
     umkms = sorted(umkms, key=lambda x: (x.lat - lat) ** 2 + (x.lng - lng) ** 2)
-    umkms = list(map(lambda x: x.to_dict(), umkms))
+    umkm_dicts = list(map(lambda x: x.to_dict(), umkms))
+    for i, u in enumerate(umkm_dicts):
+        budget = umkms[i].campaign[0].budget
+        if budget > 300000:
+            u['reward_level'] = 3
+        elif budget > 200000:
+            u['reward_level'] = 2
+        elif budget > 100000:
+            u['reward_level'] = 1
+        else:
+            u['reward_level'] = 0
 
-    return respond_data(umkms)
+    return respond_data(umkm_dicts)

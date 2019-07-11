@@ -71,6 +71,13 @@ class UMKM(BaseModel):
         return super().to_dict(exclude)
 
 
+class Campaign(BaseModel):
+    umkm = pw.ForeignKeyField(UMKM, backref="campaign")
+    active = pw.BooleanField(default=False)
+    budget = pw.IntegerField(default=0)
+    price = pw.IntegerField(default=0)
+
+
 class UMKMStatistic(BaseModel):
     umkm = pw.ForeignKeyField(UMKM, backref="statistic")
     negative_review_count = pw.IntegerField(default=0)
