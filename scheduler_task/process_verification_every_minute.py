@@ -7,7 +7,7 @@ import requests
 import json
 
 from service.image_recognition import check_image_similarity
-from model import UMKM, UMKMValidator, Verification
+from model import UMKM, UMKMValidator, Verification, Campaign
 
 
 def get_base_images(umkm):
@@ -38,6 +38,19 @@ def is_verification_valid(verification, seed_images):
     return False
 
 
+def update_user_campaign(verification, umkm):
+    verification_count = len(Verification.select().where((Verification.umkm == umkm) & (Verification.pending == False)))
+    campaign = Campaign.get_or_none(Campaign.umkm == umkm)
+    user = verification.user
+    if campaign.budget - campaign.price >= 0:
+        percentage_done = campaign.budget * (campaign.budget + campaign.price * verification_count)
+        user.balance += campaign.price * percentage_done
+        campaign.budget -= campaign.price * percentage_done
+
+    user.save()
+    campaign.save()
+
+
 def process_verifications():
     umkms = UMKM.select()
     for u in umkms:
@@ -49,6 +62,7 @@ def process_verifications():
             v.success = is_verification_valid(v, seed_images)
             v.pending = False
             v.save()
+            update_user_campaign(v, u)
 
 
 schedule.every().minute.do(process_verifications)
