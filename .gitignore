@@ -109,3 +109,5 @@ upload/*
 
 .vscode
 jepret-be-env
+
+seed

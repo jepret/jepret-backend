@@ -1,5 +1,7 @@
+import io
+import qrcode
 from datetime import datetime
-from flask import request, g
+from flask import request, g, Response
 
 from core.error import BaseError
 from core.util import *
@@ -62,3 +64,17 @@ def nearby_UMKM():
             u['reward_level'] = 0
 
     return respond_data(umkm_dicts)
+
+
+def get_qr(umkm_id):
+    umkm = UMKM.get_or_none(UMKM.id == umkm_id)
+    if not umkm:
+        raise BaseError("UMKM not found", 404)
+
+    img = qrcode.make(umkm.unique_id)
+
+    img_data = io.BytesIO()
+    img.save(img_data, format='PNG')
+    img_data = img_data.getvalue()
+
+    return Response(img_data, mimetype="image/png")

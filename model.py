@@ -63,6 +63,7 @@ class UMKM(BaseModel):
     province = pw.CharField()
     founding_date = pw.DateField()
     balance = pw.IntegerField(default=0)
+    unique_id = pw.CharField(default=generate_random_str)
 
     def to_dict(self, exclude=[], exclude_balance=True):
         if exclude_balance:
@@ -76,6 +77,11 @@ class Campaign(BaseModel):
     active = pw.BooleanField(default=False)
     budget = pw.IntegerField(default=0)
     price = pw.IntegerField(default=0)
+
+
+class UMKMValidator(BaseModel):
+    umkm = pw.ForeignKeyField(UMKM, backref="validator")
+    seed_images = pw.CharField(default="[]")
 
 
 class UMKMStatistic(BaseModel):
@@ -105,3 +111,15 @@ class File(BaseModel):
     owner = pw.ForeignKeyField(User, backref="files")
     filename = pw.CharField()
     unique_id = pw.CharField(default=generate_random_str)
+
+
+class Transaction(BaseModel):
+    sender = pw.ForeignKeyField(User, backref="transactions")
+    receiver = pw.ForeignKeyField(UMKM, backref="transactions")
+    amount = pw.IntegerField()
+
+    def to_dict(self, exclude=[]):
+        result = super().to_dict(exclude)
+        result['receiver'] = self.receiver.to_dict()
+
+        return result

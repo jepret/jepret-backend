@@ -1,0 +1,1 @@
+import scheduler_task.process_verification_every_minute

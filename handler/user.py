@@ -57,3 +57,11 @@ def verifications():
     vs = [v.to_dict() for v in vs]
 
     return respond_data(vs)
+
+
+def transactions():
+    user = User.get_or_none(User.id == g.user['id'])
+    ts = user.transactions
+    ts = [t.to_dict() for t in ts]
+
+    return respond_data(ts)

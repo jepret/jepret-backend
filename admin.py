@@ -27,11 +27,16 @@ class UMKMStatisticAdmin(ModelView):
     pass
 
 
+class UMKMValidatorAdmin(ModelView):
+    pass
+
+
 ADMIN_VIEWS = [
     UserAdmin(User),
     UMKMAdmin(UMKM),
     CampaignAdmin(Campaign),
     VerificationAdmin(Verification),
     QuestionAnswerAdmin(QuestionAnswer),
-    UMKMStatisticAdmin(UMKMStatistic)
+    UMKMStatisticAdmin(UMKMStatistic),
+    UMKMValidatorAdmin(UMKMValidator)
 ]
