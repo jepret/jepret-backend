@@ -72,7 +72,9 @@ class UMKM(BaseModel):
         if exclude_balance:
             exclude.append(UMKM.balance)
 
-        return super().to_dict(exclude)
+        result = super().to_dict(exclude)
+        result['founding_date'] = self.founding_date.strftime("%Y-%m-%d %H:%M:%S")
+        return result
 
 
 class UMKMDetail(BaseModel):

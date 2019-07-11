@@ -51,6 +51,8 @@ def profile():
     user = User.get_or_none(User.id == g.user['id'])
     result = user.to_dict()
     result["has_umkm"] = list(user.umkms) != []
+    if result["has_umkm"]:
+        result["umkm"] = list(user.umkms)[0].to_dict(exclude_balance=False)
     return respond_data(result)
 
 
