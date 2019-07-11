@@ -54,6 +54,16 @@ def profile():
     return respond_data(result)
 
 
+def edit_profile():
+    data = request.json
+    user = User.get_or_none(User.id == g.user['id'])
+    for key,val in data.items():
+        setattr(user, key, val)
+
+    user.save()
+    return respond_data(user.to_dict())
+
+
 def verifications():
     user = User.get_or_none(User.id == g.user['id'])
     vs = user.verifications
