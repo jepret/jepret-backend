@@ -73,15 +73,18 @@ create_umkm_detail = create_umkm_detail.add_next(
         },
         "money_eq_success": {
             "type": "integer",
-            "required": True
+            "required": True,
+            "check_with": validate_rate
         },
         "money_eq_competence": {
             "type": "integer",
-            "required": True
+            "required": True,
+            "check_with": validate_rate
         },
         "do_care_money": {
             "type": "integer",
-            "required": True
+            "required": True,
+            "check_with": validate_rate
         },
     })
 )
