@@ -3,7 +3,7 @@ from flask import request, g
 from core.error import BaseError
 from redis_model import Session
 from core.util import *
-from model import User
+from model import User, UMKMDetail
 
 
 def register():
@@ -50,9 +50,11 @@ def login():
 def profile():
     user = User.get_or_none(User.id == g.user['id'])
     result = user.to_dict()
-    result["has_umkm"] = list(user.umkms) != []
+    umkms = list(user.umkms)
+    result["has_umkm"] = umkms != []
     if result["has_umkm"]:
-        result["umkm"] = list(user.umkms)[0].to_dict(exclude_balance=False)
+        result["umkm"] = umkms[0].to_dict(exclude_balance=False)
+        result["umkm"]["has_detail"] = UMKMDetail.get_or_none(UMKMDetail.umkm == umkms[0]) is not None
     return respond_data(result)
 
 
