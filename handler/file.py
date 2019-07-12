@@ -26,7 +26,7 @@ def upload_file():
         filename = secure_filename(file.filename)
         extension = filename.split(".")[-1]
         if extension not in ALLOWED_EXTENSIONS:
-            raise BaseError(f"{extension} not allowed", 400)
+            raise BaseError(extension + " not allowed", 400)
 
     result = []
     for file in files:
@@ -47,7 +47,7 @@ def get_file(unique_id):
     extension = file.filename.split(".")[-1]
     if extension == "jpg":
         extension = "jpeg"
-    mime_type = f"image/{extension}"
+    mime_type = "image/" + extension
 
     return send_file(
         os.path.join(os.environ["UPLOAD_DIRECTORY"], file.unique_id), mime_type
