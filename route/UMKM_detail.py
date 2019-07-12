@@ -10,6 +10,11 @@ def validate_gender(field, value, error):
         error(field, "Gender only m/f")
 
 
+def validate_rate(field, value, error):
+    if value <= 0 or value > 5:
+        error(field, "Rate 1- 5")
+
+
 create_umkm_detail = AuthMiddleware()
 create_umkm_detail = create_umkm_detail.add_next(
     BaseValidator({
@@ -67,15 +72,15 @@ create_umkm_detail = create_umkm_detail.add_next(
             "required": True
         },
         "money_eq_success": {
-            "type": "boolean",
+            "type": "integer",
             "required": True
         },
         "money_eq_competence": {
-            "type": "boolean",
+            "type": "integer",
             "required": True
         },
         "do_care_money": {
-            "type": "boolean",
+            "type": "integer",
             "required": True
         },
     })
